@@ -22,6 +22,8 @@
     .small{font-size:0.9rem;color:var(--muted);margin-top:12px}
     @media (max-width:420px){.langs{grid-template-columns:1fr;gap:10px}}
 
+
+
     /* Modal / viewer */
     #pdfModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center}
     #pdfContainer{position:relative;width:100%;height:100%;max-width:1000px;max-height:100vh;background:#fff;border-radius:6px;overflow:hidden;}
@@ -33,6 +35,7 @@
     @media (max-width:820px){
       #pdfContainer{width:100%;height:100%;border-radius:0}
       .btnClose{padding:10px}
+    }
   /* Avatar inline bên trái tiêu đề */
 .title-row{
   display: flex;
@@ -43,6 +46,7 @@
   margin-bottom: 12px;
 }
 
+	
 /* Avatar theo style mobile */
 .avatar-inline{
   width: 160px;
@@ -54,15 +58,25 @@
   display: block;
 }
 
+	body {
+  background-image: url('https://images-ext-1.discordapp.net/external/lv29gavg3g1cxbF9ctFvYYYwb43ZY1LYi9RSMj1igX4/https/pbs.twimg.com/media/G9feY-qaMAA5WpF.jpg%3Alarge?format=webp&width=674&height=842'); /* Thay tên file ảnh của bạn vào đây */
+background-size: cover;      /* Ảnh tự co giãn để lấp đầy toàn màn hình */
+  background-position: center; /* Căn ảnh ở chính giữa */
+  background-attachment: fixed;/* Ảnh đứng yên khi cuộn chuột */
+  background-repeat: no-repeat;/* Không lặp lại ảnh */
+  min-height: 100vh;
+}
+	
 /* Text luôn căn giữa */
 .title-text{
   text-align: center;
 }
+
   </style>
 </head>
 <body>
 <div class="title-row">
-  <img class="avatar-inline" src="avatar.jpg" alt="Ảnh Chú Phước">
+  <img class="avatar-inline" src="avatar.jpg" alt="Ảnh Phước Bánh Mì">
   <div class="title-text">
     <h1 id="title">Phước Bánh Mì Bonjour</h1>
     <p>Choose your language</p>
@@ -140,14 +154,16 @@
       </a>
       
     </div>
-
     <div class="small"> If you don't found your language, feel free to tell us to add it !</div>
     <div class="small"> If you found any error in the translation, please tell us !</div>
-
+        <div class="small"> .....</div> 
+		<div class="small"> ....</div> 
 		<div class="small"> ...</div> 
 		<div class="small"> ..</div> 
 		<div class="small"> .</div> 
 
+
+		
   </div>
 
   <!-- Modal viewer -->
@@ -277,5 +293,7 @@
   // Optional: prime pdfjsAvailable check in background so first click is faster
   pdfjsAvailable();
 </script>
+
 </body>
+		
 </html>
