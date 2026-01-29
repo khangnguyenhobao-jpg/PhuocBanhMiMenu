@@ -35,38 +35,30 @@
       .btnClose{padding:10px}
     }
   /* Avatar inline bên trái tiêu đề */
+  /* Avatar inline bên trái tiêu đề */
 .title-row{
-  display:flex;
-  align-items:center;
-  justify-content:center; /* giữ cả nhóm căn giữa trong .wrap */
-  gap:14px;
-  margin-bottom:12px;
+  display: flex;
+  flex-direction: column;   /* LUÔN stack dọc */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-/* Avatar vuông, lớn hơn, bo góc nhẹ */
+/* Avatar theo style mobile */
 .avatar-inline{
-  width:80px;               /* chỉnh thành kích thước bạn muốn */
-  height:80px;
-  object-fit:cover;
-  border-radius:8px;        /* bo góc vuông; đổi 50% nếu muốn tròn */
-  border:3px solid #fff;
-  box-shadow:0 8px 20px rgba(0,0,0,0.12);
-  flex-shrink:0;
-  display:block;
+  width: 160px;
+  height: 160px;
+  object-fit: none
+  border-radius: 8px;
+  border: 3px solid #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  display: block;
 }
 
-/* Tiêu đề đặt ngay bên phải avatar, căn trái nhưng cả khối vẫn nằm giữa .wrap */
-.title-text{ text-align:left; }
-
-/* Trường hợp màn hình nhỏ: stack avatar lên trên tiêu đề */
-@media (max-width:520px){
-  .title-row{
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-  }
-  .title-text{ text-align:center; } /* trên mobile, giữ text giữa */
-  .avatar-inline{ width:64px; height:64px; }
+/* Text luôn căn giữa */
+.title-text{
+  text-align: center;
 }
   </style>
 </head>
