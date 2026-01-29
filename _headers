@@ -1,3 +1,7 @@
+/*.pdf
+  Content-Type: application/pdf
+  Content-Disposition: inline
+
 /menu_vi.pdf
   Content-Type: application/pdf
   Content-Disposition: inline; filename="menu_vi.pdf"
