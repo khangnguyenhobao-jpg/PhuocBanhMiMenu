@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Phước Bánh Mì - Chọn ngôn ngữ</title>
+  <style>
+    :root{--bg:#fff;--card:#fff;--accent:#E94E1B;--muted:#666}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,#fff 0%,#f7f7f7 100%);
+      color:#111;padding:20px;
+    }
+    .wrap{width:100%;max-width:520px;background:var(--card);border-radius:14px;
+      box-shadow:0 6px 30px rgba(16,24,40,0.08);padding:20px;text-align:center}
+    h1{margin:4px 0 6px;font-size:1.25rem}
+    p{margin:0 0 18px;color:var(--muted)}
+    .langs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .btn{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px;border-radius:10px;border:1px solid #eee;background:#fff;
+      font-weight:600;color:#111;text-decoration:none;box-shadow:0 2px 6px rgba(16,24,40,0.04)
+    }
+    .btn:hover{transform:translateY(-2px);transition:all .15s}
+    .flag{width:28px;height:20px;border-radius:4px;flex-shrink:0;object-fit:cover;background:#eee}
+    .small{font-size:0.9rem;color:var(--muted);margin-top:12px}
+    @media (max-width:420px){
+      .langs{grid-template-columns:1fr;gap:10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="title">
+    <h1 id="title">Phước Bánh Mì</h1>
+    <p>Chọn ngôn ngữ để xem menu (PDF)</p>
+
+    <div class="langs" id="langList">
+      <!-- Thay các đường dẫn PDF ở đây tương ứng -->
+      <a class="btn" href="menu_vi.pdf" target="_blank" rel="noopener noreferrer">
+        <img class="flag" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='20'><rect width='28' height='20' fill='%23DA251D'/></svg>" alt="">
+        Tiếng Việt
+      </a>
+
+      <a class="btn" href="menu_en.pdf" target="_blank" rel="noopener noreferrer">
+        <img class="flag" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='20'><rect width='28' height='20' fill='%23007BFF'/></svg>" alt="">
+        English
+      </a>
+
+      <a class="btn" href="menu_zh.pdf" target="_blank" rel="noopener noreferrer">
+        <img class="flag" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='20'><rect width='28' height='20' fill='%23FFD700'/></svg>" alt="">
+        中文
+      </a>
+
+      <a class="btn" href="menu_ko.pdf" target="_blank" rel="noopener noreferrer">
+        <img class="flag" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='20'><rect width='28' height='20' fill='%23000000'/></svg>" alt="">
+        한국어
+      </a>
+    </div>
+
+    <div class="small">Nếu muốn thay đổi file, upload file PDF vào cùng thư mục và sửa đường dẫn trong các thẻ <code>a</code>.</div>
+  </div>
+</body>
+</html>
