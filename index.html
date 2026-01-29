@@ -78,67 +78,120 @@
   </div>
 
   <script>
-    // Helper: detect iOS devices (iPhone/iPad/iPod)
-    function isIOS() {
-      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  // Path tới PDF.js viewer (local trong repo)
+  const PDFJS_VIEWER = '/pdfjs/web/viewer.html';
+
+  // Kiểm tra nhanh xem PDF.js viewer có sẵn không (HEAD request). Kết quả được cache.
+  let _pdfjsAvailable = null;
+  async function pdfjsAvailable() {
+    if (_pdfjsAvailable !== null) return _pdfjsAvailable;
+    try {
+      const res = await fetch(PDFJS_VIEWER, { method: 'HEAD' });
+      _pdfjsAvailable = res.ok;
+    } catch (e) {
+      _pdfjsAvailable = false;
+    }
+    return _pdfjsAvailable;
+  }
+
+  // Helper: detect iOS devices (iPhone/iPad/iPod)
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  const modal = document.getElementById('pdfModal');
+  const frame = document.getElementById('pdfFrame'); // iframe trong modal
+  const closeBtn = document.getElementById('pdfClose');
+  const openTabBtn = document.getElementById('openTab');
+  const directLink = document.getElementById('directPdfLink');
+
+  function normalizePath(path) {
+    return path.startsWith('/') ? path : '/' + path;
+  }
+
+  function viewerUrlFor(pdfPath) {
+    const normalized = normalizePath(pdfPath);
+    return PDFJS_VIEWER + '?file=' + encodeURIComponent(normalized);
+  }
+
+  // Open modal and set iframe src (fallback)
+  function showModalWithPdf(url) {
+    frame.src = url;
+    directLink.href = url;
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closePdf() {
+    if (frame) frame.src = '';
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  // Main open logic: prefer PDF.js viewer if available (open in new tab).
+  // Otherwise: on iOS open direct in new tab; on others use modal iframe.
+  async function openPdf(url) {
+    const isExternal = /^https?:\/\//i.test(url) && (new URL(url, location.href).origin !== location.origin);
+
+    // If external host, just open new tab
+    if (isExternal) {
+      window.open(url, '_blank', 'noopener');
+      return;
     }
 
-    const modal = document.getElementById('pdfModal');
-    const frame = document.getElementById('pdfFrame');
-    const closeBtn = document.getElementById('pdfClose');
-    const openTabBtn = document.getElementById('openTab');
+    const pdfjsOk = await pdfjsAvailable();
 
-    // Open modal and set iframe src
-    function openPdf(url) {
-      // Some iOS versions cannot render PDFs in an iframe reliably -> open new tab
-      if (isIOS()) {
-        window.open(url, '_blank', 'noopener');
-        return;
+    if (pdfjsOk) {
+      // Use PDF.js viewer (open new tab)
+      const v = viewerUrlFor(url);
+      window.open(v, '_blank', 'noopener');
+      return;
+    }
+
+    // If no pdf.js:
+    if (isIOS()) {
+      // iOS: open direct in new tab (iframe unreliable)
+      window.open(url, '_blank', 'noopener');
+      return;
+    }
+
+    // Desktop/Android fallback: show modal iframe
+    showModalWithPdf(url);
+  }
+
+  // Delegated click handler for links with data-pdf
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest('a[data-pdf]');
+    if (!a) return;
+    e.preventDefault();
+    const url = a.getAttribute('href');
+    openPdf(url);
+  });
+
+  // Close handlers
+  if (closeBtn) closeBtn.addEventListener('click', closePdf);
+  if (openTabBtn) openTabBtn.addEventListener('click', async function () {
+    // If PDF.js available open via viewer, else open current iframe src
+    const pdfjsOk = await pdfjsAvailable();
+    if (pdfjsOk) {
+      // if iframe has a src (direct pdf), convert to viewer URL
+      const current = frame && frame.src ? frame.src : (directLink && directLink.href ? directLink.href : '');
+      if (current) {
+        const normalized = normalizePath(new URL(current, location.href).pathname);
+        window.open(viewerUrlFor(normalized), '_blank', 'noopener');
       }
-      frame.src = url;
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden', 'false');
-    }
-
-    // Close modal
-    function closePdf() {
-      frame.src = '';
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden', 'true');
-    }
-
-    // Click handler for links with data-pdf (delegation)
-    document.addEventListener('click', function(e){
-      const a = e.target.closest('a[data-pdf]');
-      if (!a) return;
-      e.preventDefault();
-      const url = a.getAttribute('href');
-      // Fallback: if URL is absolute to another host, open new tab
-      const isExternal = /^https?:\/\//i.test(url) && (new URL(url, location.href).origin !== location.origin);
-      if (isExternal) {
-        window.open(url, '_blank', 'noopener');
-        return;
-      }
-      openPdf(url);
-    });
-
-    // Close handlers
-    closeBtn.addEventListener('click', closePdf);
-    // open in new tab button
-    openTabBtn.addEventListener('click', function(){
-      const url = frame.src;
+    } else {
+      const url = frame && frame.src ? frame.src : (directLink && directLink.href ? directLink.href : '');
       if (url) window.open(url, '_blank', 'noopener');
-    });
+    }
+  });
 
-    // Close on Escape
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape') closePdf();
-    });
+  // Close on Escape and click outside to close
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePdf(); });
+  if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) closePdf(); });
 
-    // Click outside to close
-    modal.addEventListener('click', function(e){
-      if (e.target === modal) closePdf();
-    });
-  </script>
+  // Optional: prime pdfjsAvailable check in background so first click is faster
+  pdfjsAvailable();
+</script>
 </body>
 </html>
